@@ -10,7 +10,7 @@ const VERSION = '0.1.1';
 const { positional, options } = parseArgs(process.argv.slice(2));
 const command = positional[0] || 'help';
 const projectRoot = path.resolve(typeof options.project === 'string' ? options.project : process.cwd());
-const rl = readline.createInterface({ input, output });
+let rl = readline.createInterface({ input, output });
 const source = typeof options.source === 'string' ? options.source : process.env.AI_HOUSE_SOURCE;
 
 function printHelp() {
@@ -18,15 +18,74 @@ function printHelp() {
 }
 async function selectSkills() {
  const catalog = JSON.parse(await fs.readFile(path.join(getPackageRoot(), 'skills/catalog.json'), 'utf8'));
- console.log('\nAvailable skills (required workflow skills are always included):');
- catalog.forEach((s,i)=>console.log(` ${String(i+1).padStart(2,' ')}. ${s.id.padEnd(16)} ${s.description}${s.recommended?' [recommended]':''}`));
- const answer=(await rl.question('\nEnter numbers or IDs separated by commas (Enter = recommended): ')).trim();
- if(!answer) return catalog.filter(s=>s.recommended).map(s=>s.id);
- return [...new Set(answer.split(',').map(v=>v.trim()).filter(Boolean).map(v=>{
-  if(/^\d+$/.test(v)){const item=catalog[Number(v)-1];if(!item)throw new Error(`Invalid skill number: ${v}`);return item.id;}
-  if(!catalog.some(s=>s.id===v))throw new Error(`Unknown skill ID: ${v}`);
-  return v;
- }))];
+ if (!input.isTTY || !output.isTTY || typeof input.setRawMode !== 'function') {
+  console.log('\nAvailable skills (required workflow skills are always included):');
+  catalog.forEach((s,i)=>console.log(' ' + String(i+1).padStart(2,' ') + '. ' + s.id.padEnd(16) + ' ' + s.description + (s.recommended?' [recommended]':'')));
+  const answer=(await rl.question('\nEnter numbers or IDs separated by commas (Enter = recommended): ')).trim();
+  if(!answer) return catalog.filter(s=>s.recommended).map(s=>s.id);
+  return [...new Set(answer.split(',').map(v=>v.trim()).filter(Boolean).map(v=>{
+   if(/^\d+$/.test(v)){const item=catalog[Number(v)-1];if(!item)throw new Error('Invalid skill number: '+v);return item.id;}
+   if(!catalog.some(s=>s.id===v))throw new Error('Unknown skill ID: '+v);
+   return v;
+  }))];
+ }
+ rl.close();
+ const selected = new Set(catalog.filter(s => s.recommended).map(s => s.id));
+ let cursor = 0;
+ const render = () => {
+  output.write('\x1b[2J\x1b[H');
+  output.write('Select skills to install\n');
+  output.write('Use Up/Down arrows to move, Space to toggle, Enter to confirm, Ctrl+C to cancel.\n\n');
+  catalog.forEach((skill, index) => {
+   const pointer = index === cursor ? '>' : ' ';
+   const checkbox = selected.has(skill.id) ? 'x' : ' ';
+   const recommended = skill.recommended ? ' (recommended)' : '';
+   output.write(pointer + ' [' + checkbox + '] ' + skill.id + recommended + '\n');
+   output.write('    ' + skill.description + '\n');
+  });
+  output.write('\n');
+ };
+ return await new Promise((resolve, reject) => {
+  const wasRaw = input.isRaw;
+  const cleanup = () => {
+   input.off('keypress', onKeypress);
+   if (typeof input.setRawMode === 'function') input.setRawMode(Boolean(wasRaw));
+   output.write('\x1b[?25h');
+   input.pause();
+   rl = readline.createInterface({ input, output });
+  };
+  const onKeypress = (str, key = {}) => {
+   if (key.ctrl && key.name === 'c') {
+    cleanup();
+    reject(new Error('Skill selection cancelled.'));
+    return;
+   }
+   if (key.name === 'up') cursor = (cursor - 1 + catalog.length) % catalog.length;
+   else if (key.name === 'down') cursor = (cursor + 1) % catalog.length;
+   else if (key.name === 'space' || str === ' ') {
+    const id = catalog[cursor].id;
+    if (selected.has(id)) selected.delete(id);
+    else selected.add(id);
+   } else if (key.name === 'return' || key.name === 'enter') {
+    cleanup();
+    output.write('Selected skills: ' + ([...selected].join(', ') || '(none; required workflow skills will still be added)') + '\n');
+    resolve([...selected]);
+    return;
+   }
+   render();
+  };
+  try {
+   readline.emitKeypressEvents(input);
+   input.setRawMode(true);
+   input.resume();
+   output.write('\x1b[?25l');
+   input.on('keypress', onKeypress);
+   render();
+  } catch (error) {
+   cleanup();
+   reject(error);
+  }
+ });
 }
 async function selectAdapter() {
  const selected=String(options.adapter||'').trim().toLowerCase();
