@@ -1,6 +1,6 @@
 {
   "name": "ai-software-house-rules-engine",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A local-first CLI that installs and updates AI software-house rules and skills in existing projects.",
   "type": "module",
   "bin": { "ai-house": "./bin/ai-house.js" },
