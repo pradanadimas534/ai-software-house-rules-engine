@@ -1,0 +1,12 @@
+{
+  "name": "ai-software-house-rules-engine",
+  "version": "0.1.1",
+  "description": "A local-first CLI that installs and updates AI software-house rules and skills in existing projects.",
+  "type": "module",
+  "bin": { "ai-house": "./bin/ai-house.js" },
+  "exports": { ".": "./src/index.js" },
+  "scripts": { "test": "node --test", "check": "node --check bin/ai-house.js && node --check src/index.js && node --check src/installer.js" },
+  "engines": { "node": ">=20" },
+  "license": "MIT",
+  "files": ["bin", "src", "templates", "skills", "adapters", "README.md", "LICENSE"]
+}
