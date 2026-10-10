@@ -1,1 +1,12 @@
-placeholder
+[
+  {"id":"software-house","name":"Software House Workflow","description":"Orchestrates sequential work from understanding to final report.","file":"software-house/SKILL.md","recommended":true},
+  {"id":"planning","name":"Planning & Requirements","description":"Turns requests into scope, acceptance criteria, and ordered steps.","file":"planning/SKILL.md","recommended":true},
+  {"id":"ui-ux","name":"UI/UX Design","description":"Usability, visual hierarchy, responsive behavior, accessibility.","file":"ui-ux/SKILL.md"},
+  {"id":"frontend","name":"Frontend Engineering","description":"Frontend architecture, state, performance, accessibility, and resilient UI.","file":"frontend/SKILL.md"},
+  {"id":"backend","name":"Backend Engineering","description":"APIs, server validation, authorization, errors, and security.","file":"backend/SKILL.md"},
+  {"id":"database","name":"Database Engineering","description":"Schema, migrations, integrity, query behavior, and data safety.","file":"database/SKILL.md"},
+  {"id":"testing","name":"Testing & QA","description":"Risk-based verification and honest test reporting.","file":"testing/SKILL.md","recommended":true},
+  {"id":"code-review","name":"Code Review & Security","description":"Reviews changes for bugs, security issues, regressions, and scope creep.","file":"code-review/SKILL.md","recommended":true},
+  {"id":"performance","name":"Performance Engineering","description":"Measures and improves real bottlenecks without premature optimization.","file":"performance/SKILL.md"},
+  {"id":"documentation","name":"Documentation","description":"Accurate setup, usage, architecture, and change documentation.","file":"documentation/SKILL.md"}
+]
