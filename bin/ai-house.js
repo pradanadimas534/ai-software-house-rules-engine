@@ -2,6 +2,7 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import readline from 'node:readline/promises';
+import { emitKeypressEvents } from 'node:readline';
 import { stdin as input, stdout as output } from 'node:process';
 import { initialize, updateInstallation, uninstall, getPackageRoot, getStatus, doctor } from '../src/installer.js';
 import { parseArgs } from '../src/utils.js';
@@ -75,7 +76,7 @@ async function selectSkills() {
    render();
   };
   try {
-   readline.emitKeypressEvents(input);
+   emitKeypressEvents(input);
    input.setRawMode(true);
    input.resume();
    output.write('\x1b[?25l');
