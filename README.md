@@ -33,9 +33,26 @@ node .\bin\ai-house.js doctor --project C:\path\to\test-project
 
 If you omit `--skills`, the CLI prompts you to select skills manually. Core workflow skills (`software-house`, `planning`, `testing`, and `code-review`) are always included because they define the minimum operating process.
 
-## Install from GitHub
+## Install directly in any project (no manual clone)
 
-Clone the public repository and link the CLI locally:
+Open the terminal **inside the project you want to configure** and run:
+
+```powershell
+npx --yes --package=github:pradanadimas534/ai-software-house-rules-engine ai-house init --project . --adapter none --source https://github.com/pradanadimas534/ai-software-house-rules-engine.git
+```
+
+The CLI prompts you to choose skills. The command downloads the tool into npm's temporary/cache area; it does **not** clone the tool into your project folder. The generated `AGENTS.md` and selected skills are installed into the current project. Node.js 20+ and Git are required for this GitHub-based package flow.
+
+Check the installation:
+
+```powershell
+npx --yes --package=github:pradanadimas534/ai-software-house-rules-engine ai-house status --project .
+npx --yes --package=github:pradanadimas534/ai-software-house-rules-engine ai-house doctor --project .
+```
+
+To avoid repeatedly downloading the package and have the `ai-house` command available globally in your local development environment, use the optional linked installation below.
+
+## Optional: clone and link for development
 
 ```powershell
 git clone https://github.com/pradanadimas534/ai-software-house-rules-engine.git
@@ -43,7 +60,7 @@ cd ai-software-house-rules-engine
 npm link
 ```
 
-Then open a terminal in the target project and run `ai-house init`. When this package is published to npm, the CLI can also be distributed with `npx`.
+Then open a terminal in the target project and run `ai-house init`.
 
 ## Configure central Git updates
 
