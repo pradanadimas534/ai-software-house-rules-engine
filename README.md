@@ -2,7 +2,7 @@
 
 A local-first Node.js CLI that installs an `AGENTS.md` workflow contract and manually selected specialist skills into an existing project. It does not create an AI model, VS Code extension, dashboard, hosted service, or dependency on another application.
 
-> Status: MVP scaffold, version 0.1.1. Validate it in a disposable project before using it in a production repository.
+> Status: MVP scaffold, version 0.1.2. Validate it in a disposable project before using it in a production repository.
 
 ## What it does
 
@@ -31,7 +31,7 @@ node .\bin\ai-house.js status --project C:\path\to\test-project
 node .\bin\ai-house.js doctor --project C:\path\to\test-project
 ```
 
-If you omit `--skills`, the CLI prompts you to select skills manually. Core workflow skills (`software-house`, `planning`, `testing`, and `code-review`) are always included because they define the minimum operating process.
+If you omit `--skills`, the CLI opens an interactive checklist in a terminal: use the Up/Down arrows to move, Space to toggle skills, and Enter to confirm. In non-interactive terminals, it falls back to comma-separated numbers or skill IDs. Core workflow skills (`software-house`, `planning`, `testing`, and `code-review`) are always included because they define the minimum operating process.
 
 ## Install directly in any project (no manual clone)
 
