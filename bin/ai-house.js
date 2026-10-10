@@ -6,7 +6,7 @@ import { stdin as input, stdout as output } from 'node:process';
 import { initialize, updateInstallation, uninstall, getPackageRoot, getStatus, doctor } from '../src/installer.js';
 import { parseArgs } from '../src/utils.js';
 
-const VERSION = '0.1.1';
+const VERSION = '0.1.2';
 const { positional, options } = parseArgs(process.argv.slice(2));
 const command = positional[0] || 'help';
 const projectRoot = path.resolve(typeof options.project === 'string' ? options.project : process.cwd());
