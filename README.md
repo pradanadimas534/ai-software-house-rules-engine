@@ -31,7 +31,34 @@ node .\bin\ai-house.js status --project C:\path\to\test-project
 node .\bin\ai-house.js doctor --project C:\path\to\test-project
 ```
 
-If you omit `--skills`, the CLI opens an interactive checklist in a terminal: use the Up/Down arrows to move, Space to toggle skills, and Enter to confirm. In non-interactive terminals, it falls back to comma-separated numbers or skill IDs. Core workflow skills (`software-house`, `planning`, `testing`, and `code-review`) are always included because they define the minimum operating process.
+If you omit `--skills`, the CLI opens an interactive checklist in a terminal.
+
+Example of the selection UI:
+
+```text
+Select skills to install
+Use Up/Down arrows to move, Space to toggle, Enter to confirm, Ctrl+C to cancel.
+
+> [x] software-house (recommended)
+  [x] planning (recommended)
+  [ ] ui-ux
+  [ ] frontend
+  [ ] backend
+  [ ] database
+  [x] testing (recommended)
+  [x] code-review (recommended)
+  [ ] performance
+  [ ] documentation
+```
+
+How to use the checklist:
+
+1. Press **Up/Down** to move between skills.
+2. Press **Space** to check or uncheck the highlighted skill. You can select multiple skills.
+3. Press **Enter** to confirm your selection.
+4. Press **Ctrl+C** to cancel.
+
+Skills marked as recommended are checked by default. The core workflow skills (`software-house`, `planning`, `testing`, and `code-review`) are always included even if you uncheck them. If the terminal does not support interactive input, the CLI falls back to comma-separated skill numbers or IDs.
 
 ## Install directly in any project (no manual clone)
 
